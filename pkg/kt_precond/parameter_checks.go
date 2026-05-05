@@ -138,7 +138,7 @@ func EnsureParamLessOrEqualZeroPub[T int | int16 | int32 | int64 | float32 | flo
 
 // Use in function to validate any pointer parameter. Returns non-public `kt_errors.ValidationFault` if pointer is Nil naming `paramName` in the error message
 // and `source` as source (if you pass multiple pieces they are concatenated with "." char)
-func EnsureParamNonNil[T *any](ptr T, paramName string, source ...string) *kt_errors.FaultBuilder {
+func EnsureParamNonNil(ptr any, paramName string, source ...string) *kt_errors.FaultBuilder {
 	if ptr == nil {
 		return GetBaseValidationFaultBuilder(fmt.Sprintf("'%s' is mandatory and can not be Nil", paramName), source...)
 	}
@@ -147,7 +147,7 @@ func EnsureParamNonNil[T *any](ptr T, paramName string, source ...string) *kt_er
 
 // Use in function to validate any pointer parameter. Returns public `kt_errors.ValidationFault` if pointer is Nil naming `paramName` in the error message and
 // `source` as source (if you pass multiple pieces they are concatenated with "." char)
-func EnsureParamNonNilPub[T *any](ptr T, paramName string, source ...string) *kt_errors.FaultBuilder {
+func EnsureParamNonNilPub(ptr any, paramName string, source ...string) *kt_errors.FaultBuilder {
 	if ptr == nil {
 		return GetBasePublicValidationFaultBuilder(fmt.Sprintf("'%s' is mandatory and can not be Nil", paramName), source...)
 	}

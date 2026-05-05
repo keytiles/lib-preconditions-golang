@@ -4,6 +4,13 @@ We are following [Semantic versioning](https://semver.org/) in this library
 
 # Changes in releases
 
+## pre-release 0.2.1
+
+Fixes:
+
+- Fixing signature of `EnsureParamNonNil()` and `EnsureParamNonNilPub()` methods so it can also be used for not just pointers but function variables
+  or anything which can be Nil really.
+
 ## pre-release 0.2.0
 
 Fixes / Breaking (early):
