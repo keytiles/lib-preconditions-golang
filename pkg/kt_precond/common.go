@@ -15,3 +15,17 @@ func GetBasePublicValidationFaultBuilder(msgTpl string, source ...string) *kt_er
 		WithErrorCodes(kt_errors.VALIDATION_ERRCODE_INVALID_VALUE).
 		WithMessageTemplate(msgTpl)
 }
+
+func GetBaseIllegalStateFaultBuilder(msgTpl string, source ...string) *kt_errors.FaultBuilder {
+	return kt_errors.NewFaultBuilder(kt_errors.IllegalStateFault).
+		WithSource(source...).
+		WithErrorCodes(kt_errors.ILLEGALSTATE_ERRCODE_EXCPECTATION_FAILED).
+		WithMessageTemplate(msgTpl)
+}
+
+func GetBasePublicIllegalStateFaultBuilder(msgTpl string, source ...string) *kt_errors.FaultBuilder {
+	return kt_errors.NewFaultBuilder(kt_errors.IllegalStateFault).
+		WithSource(source...).
+		WithErrorCodes(kt_errors.ILLEGALSTATE_ERRCODE_EXCPECTATION_FAILED).
+		WithMessageTemplate(msgTpl)
+}
