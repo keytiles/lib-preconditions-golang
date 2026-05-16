@@ -2,6 +2,7 @@ package kt_precond
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/keytiles/lib-errorhandling-golang/v2/pkg/kt_errors"
@@ -25,8 +26,9 @@ func EnsureParamStatePub(expectation bool, paramName string, problemMsg string, 
 	return nil
 }
 
-// Use in function to validate string parameter. Returns non-public `kt_errors.ValidationFault` if value is empty naming `paramName` in the error message and
-// `source` as source (if you pass multiple pieces they are concatenated with "." char)
+// Use in function to validate string parameter. It is treated empty if only contains whitespaces!
+// Returns non-public `kt_errors.ValidationFault` if value is empty naming `paramName` in the error message and `source` as source (if you pass multiple pieces
+// they are concatenated with "." char)
 func EnsureStringParamNotEmpty(val string, paramName string, source ...string) *kt_errors.FaultBuilder {
 	if strings.TrimSpace(val) == "" {
 		return GetBaseValidationFaultBuilder(fmt.Sprintf("'%s' can not be empty", paramName), source...)
@@ -34,8 +36,9 @@ func EnsureStringParamNotEmpty(val string, paramName string, source ...string) *
 	return nil
 }
 
-// Use in function to validate string parameter. Returns public `kt_errors.ValidationFault` if value is empty naming `paramName` in the error message and
-// `source` as source (if you pass multiple pieces they are concatenated with "." char)
+// Use in function to validate string parameter. It is treated empty if only contains whitespaces!
+// Returns public `kt_errors.ValidationFault` if value is empty naming `paramName` in the error message and `source` as source (if you pass multiple pieces they
+// are concatenated with "." char)
 func EnsureParamStringNotEmptyPub(val string, paramName string, source ...string) *kt_errors.FaultBuilder {
 	if strings.TrimSpace(val) == "" {
 		return GetBasePublicValidationFaultBuilder(fmt.Sprintf("'%s' can not be empty", paramName), source...)
@@ -154,19 +157,33 @@ func EnsureParamLessOrEqualZeroPub[T int | int16 | int32 | int64 | float32 | flo
 	return nil
 }
 
-// Use in function to validate any pointer parameter. Returns non-public `kt_errors.ValidationFault` if pointer is Nil naming `paramName` in the error message
-// and `source` as source (if you pass multiple pieces they are concatenated with "." char)
+func isNilValue(v any) bool {
+	if v == nil {
+		return true
+	}
+	rv := reflect.ValueOf(v)
+	switch rv.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Interface,
+		reflect.Map, reflect.Pointer, reflect.Slice, reflect.UnsafePointer:
+		return rv.IsNil()
+	default:
+		return false
+	}
+}
+
+// Use in function to validate any parameter nil-able (Pointers, maps, slices, channels, funcs, interfaces). Returns non-public `kt_errors.ValidationFault` if
+// pointer is Nil naming `paramName` in the error message and `source` as source (if you pass multiple pieces they are concatenated with "." char)
 func EnsureParamNonNil(ptr any, paramName string, source ...string) *kt_errors.FaultBuilder {
-	if ptr == nil {
+	if isNilValue(ptr) {
 		return GetBaseValidationFaultBuilder(fmt.Sprintf("'%s' is mandatory and can not be Nil", paramName), source...)
 	}
 	return nil
 }
 
-// Use in function to validate any pointer parameter. Returns public `kt_errors.ValidationFault` if pointer is Nil naming `paramName` in the error message and
-// `source` as source (if you pass multiple pieces they are concatenated with "." char)
+// Use in function to validate any parameter nil-able (Pointers, maps, slices, channels, funcs, interfaces). Returns public `kt_errors.ValidationFault` if
+// pointer is Nil naming `paramName` in the error message and `source` as source (if you pass multiple pieces they are concatenated with "." char)
 func EnsureParamNonNilPub(ptr any, paramName string, source ...string) *kt_errors.FaultBuilder {
-	if ptr == nil {
+	if isNilValue(ptr) {
 		return GetBasePublicValidationFaultBuilder(fmt.Sprintf("'%s' is mandatory and can not be Nil", paramName), source...)
 	}
 	return nil

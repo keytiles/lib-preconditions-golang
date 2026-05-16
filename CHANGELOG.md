@@ -4,6 +4,13 @@ We are following [Semantic versioning](https://semver.org/) in this library
 
 # Changes in releases
 
+## pre-release 0.3.1
+
+Fixes:
+
+- In v0.2.1 signature of `EnsureParamNonNil()` and `EnsureParamNonNilPub()` methods were changed but usage revealed bug. It did not work. Now test case
+  was added, and implementation was changed so it works now.
+
 ## pre-release 0.3.0
 
 New features:
