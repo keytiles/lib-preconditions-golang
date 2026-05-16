@@ -7,6 +7,24 @@ import (
 	"github.com/keytiles/lib-errorhandling-golang/v2/pkg/kt_errors"
 )
 
+// Use in function to validate a parameter fulfills an expectation. Returns non-public `kt_errors.ValidationFault` if value is empty naming `paramName` in the
+// error message and `source` as source (if you pass multiple pieces they are concatenated with "." char)
+func EnsureParamState(expectation bool, paramName string, problemMsg string, source ...string) *kt_errors.FaultBuilder {
+	if !expectation {
+		return GetBaseValidationFaultBuilder(fmt.Sprintf("'%s' is invalid: %s", paramName, problemMsg), source...)
+	}
+	return nil
+}
+
+// Use in function to validate a parameter fulfills an expectation. Returns public `kt_errors.ValidationFault` if value is empty naming `paramName` in the
+// error message and `source` as source (if you pass multiple pieces they are concatenated with "." char)
+func EnsureParamStatePub(expectation bool, paramName string, problemMsg string, source ...string) *kt_errors.FaultBuilder {
+	if !expectation {
+		return GetBasePublicValidationFaultBuilder(fmt.Sprintf("'%s' is invalid: %s", paramName, problemMsg), source...)
+	}
+	return nil
+}
+
 // Use in function to validate string parameter. Returns non-public `kt_errors.ValidationFault` if value is empty naming `paramName` in the error message and
 // `source` as source (if you pass multiple pieces they are concatenated with "." char)
 func EnsureStringParamNotEmpty(val string, paramName string, source ...string) *kt_errors.FaultBuilder {

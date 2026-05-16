@@ -4,6 +4,11 @@ We are following [Semantic versioning](https://semver.org/) in this library
 
 # Changes in releases
 
+## pre-release 0.3.0
+
+New features:
+- Added `EnsureParamState()` and `EnsureParamStatePub()` methods
+
 ## pre-release 0.2.1
 
 Fixes:
